@@ -54,7 +54,7 @@ python main_win.py \
 python main_win.py \
 --arch googlenet \
 --resume [pre-trained model dir] \
---compress_rate [0.2]+[0.7]*15+[0.8]*9+[0.,0.4,0.] \
+--compress_rate [0.2]+[0.9]*24+[0.,0.4,0.] \
 --num_workers 2 \
 --epochs 1 \
 --lr 0.001 \
@@ -101,9 +101,9 @@ python main_win.py \
 --from_scratch True \
 --resume finally_pruned_model/resnet_50_1.pt \
 --num_workers 8 \
---epochs 30 \
+--epochs 40 \
 --lr 0.001 \
---lr_decay_step 5,15 \
+--lr_decay_step 5,20 \
 --save_id 2 \
 --batch_size 64 \
 --weight_decay 0.0005 \

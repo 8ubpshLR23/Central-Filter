@@ -1,147 +1,125 @@
 
 rem --------------------------vgg_16_bn----------------------------------
 
-rem @echo off
-rem set root=C:\...\
-rem set pojname=CF
-rem set arch=vgg_16_bn  
-rem start cmd /c ^
-rem "cd /D %root%%pojname%  ^
-rem & [python.exe dir]/python.exe main_win.py ^
-rem --arch vgg_16_bn ^
-rem --resume [pre-trained model dir] ^
-rem --compress_rate [0.3]*5+[0.5]*3+[0.8]*4 ^
-rem --num_workers 1 ^
-rem --epochs 1 ^
-rem --job_dir %root%%pojname% ^
-rem --lr 0.001 ^
-rem --lr_decay_step 5 ^
-rem --save_id 1 ^
-rem --weight_decay 0.005 ^
-rem --dataset CIFAR10 ^
-rem --data_dir G:/data ^
-rem & pause"
+@echo off
+start cmd /c ^
+"cd /D [code dir]  ^
+& [python.exe dir]/python.exe main_win.py ^
+--arch vgg_16_bn ^
+--resume [pre-trained model dir] ^
+--compress_rate [0.3]*5+[0.5]*3+[0.8]*4 ^
+--num_workers 1 ^
+--epochs 30 ^
+--lr 0.001 ^
+--lr_decay_step 5 ^
+--save_id 1 ^
+--weight_decay 0.005 ^
+--dataset CIFAR10 ^
+--data_dir [dataset dir] ^
+& pause"
 
 rem --------------------------resnet_56----------------------------------
 
-rem @echo off
-rem set root=C:\...\
-rem set pojname=CF
-rem set arch=resnet_56  
-rem start cmd /c ^
-rem "cd /D %root%%pojname%  ^
-rem & [python.exe dir]/python.exe main_win.py ^
-rem --arch resnet_56 ^
-rem --resume [pre-trained model dir] ^
-rem --compress_rate [0.]+[0.2,0.]*2+[0.6,0.]*7+[0.7,0.]*9+[0.8,0.]*9 ^
-rem --num_workers 1 ^
-rem --epochs 1 ^
-rem --job_dir %root%%pojname% ^
-rem --lr 0.001 ^
-rem --lr_decay_step 5 ^
-rem --save_id 1 ^
-rem --weight_decay 0.005 ^
-rem --dataset CIFAR10 ^
-rem --data_dir G:\data ^
-rem & pause"
+@echo off
+start cmd /c ^
+"cd /D [code dir]  ^
+& [python.exe dir]/python.exe main_win.py ^
+--arch resnet_56 ^
+--resume [pre-trained model dir] ^
+--compress_rate [0.]+[0.2,0.]*2+[0.6,0.]*7+[0.7,0.]*9+[0.8,0.]*9 ^
+--num_workers 1 ^
+--epochs 30 ^
+--lr 0.001 ^
+--lr_decay_step 5 ^
+--save_id 1 ^
+--weight_decay 0.005 ^
+--dataset CIFAR10 ^
+--data_dir [dataset dir] ^
+& pause"
 
 rem -------------------------densenet_40-----------------------------------
 
-rem @echo off
-rem set root=C:\...\
-rem set pojname=CF
-rem set arch=densenet_40  
-rem start cmd /c ^
-rem "cd /D %root%%pojname%  ^
-rem & [python.exe dir]/python.exe main_win.py ^
-rem --arch densenet_40 ^
-rem --resume [pre-trained model dir] ^
-rem --compress_rate [0.]+[0.5]*12+[0.3]+[0.4]*12+[0.3]+[0.4]*9+[0.]*3 ^
-rem --num_workers 1 ^
-rem --epochs 1 ^
-rem --job_dir %root%%pojname% ^
-rem --lr 0.001 ^
-rem --lr_decay_step 5 ^
-rem --save_id 2 ^
-rem --weight_decay 0.005 ^
-rem --dataset CIFAR10 ^
-rem --data_dir G:\data ^
-rem & pause"
+@echo off
+start cmd /c ^
+"cd /D [code dir]  ^
+& [python.exe dir]/python.exe main_win.py ^
+--arch densenet_40 ^
+--resume [pre-trained model dir] ^
+--compress_rate [0.]+[0.5]*12+[0.3]+[0.4]*12+[0.3]+[0.4]*9+[0.]*3 ^
+--num_workers 1 ^
+--epochs 30 ^
+--lr 0.001 ^
+--lr_decay_step 5 ^
+--save_id 2 ^
+--weight_decay 0.005 ^
+--dataset CIFAR10 ^
+--data_dir [dataset dir] ^
+& pause"
 
 
 rem ----------------------------resnet_50--------------------------------
 
-rem @echo off
-rem set root=C:\...\
-rem set pojname=CF
-rem set arch=resnet_50  
-rem start cmd /c ^
-rem "cd /D %root%%pojname%  ^
-rem & [python.exe dir]/python.exe main_win.py ^
-rem --arch resnet_50 ^
-rem --resume [pre-trained model dir] ^
-rem --compress_rate [0.]+[0.1,0.1,0.2]*1+[0.5,0.5,0.2]*2+[0.1,0.1,0.2]*1+[0.5,0.5,0.2]*3+[0.1,0.1,0.2]*1+[0.5,0.5,0.2]*5+[0.1,0.1,0.1]+[0.2,0.2,0.1]*2 ^
-rem --num_workers 4 ^
-rem --epochs 1 ^
-rem --job_dir %root%%pojname% ^
-rem --lr 0.001 ^
-rem --lr_decay_step 1 ^
-rem --save_id 1 ^
-rem --batch_size 64 ^
-rem --weight_decay 0. ^
-rem --input_size 224 ^
-rem --start_cov 0 ^
-rem --dataset ImageNet ^
-rem --data_dir G:\ImageNet ^
-rem & [python.exe dir]/python.exe main_win.py ^
-rem --arch resnet_50 ^
-rem --from_scratch True ^
-rem --resume finally_pruned_model/resnet_50_1.pt ^
-rem --num_workers 4 ^
-rem --epochs 30 ^
-rem --job_dir %root%%pojname% ^
-rem --lr 0.001 ^
-rem --lr_decay_step 5,15 ^
-rem --save_id 1 ^
-rem --batch_size 64 ^
-rem --weight_decay 0.0005 ^
-rem --input_size 224 ^
-rem --dataset ImageNet ^
-rem --data_dir G:\ImageNet ^
-rem & pause"
+@echo off
+start cmd /c ^
+"cd /D [code dir]  ^
+& [python.exe dir]/python.exe main_win.py ^
+--arch resnet_50 ^
+--resume [pre-trained model dir] ^
+--compress_rate [0.]+[0.1,0.1,0.2]*1+[0.5,0.5,0.2]*2+[0.1,0.1,0.2]*1+[0.5,0.5,0.2]*3+[0.1,0.1,0.2]*1+[0.5,0.5,0.2]*5+[0.1,0.1,0.1]+[0.2,0.2,0.1]*2 ^
+--num_workers 4 ^
+--epochs 2 ^
+--lr 0.001 ^
+--lr_decay_step 1 ^
+--save_id 1 ^
+--batch_size 64 ^
+--weight_decay 0. ^
+--input_size 224 ^
+--start_cov 0 ^
+--dataset ImageNet ^
+--data_dir [dataset dir] ^
+& [python.exe dir]/python.exe main_win.py ^
+--arch resnet_50 ^
+--from_scratch True ^
+--resume finally_pruned_model/resnet_50_1.pt ^
+--num_workers 4 ^
+--epochs 40 ^
+--lr 0.001 ^
+--lr_decay_step 5,20 ^
+--save_id 1 ^
+--batch_size 64 ^
+--weight_decay 0.0005 ^
+--input_size 224 ^
+--dataset ImageNet ^
+--data_dir [dataset dir] ^
+& pause"
 
 rem ----------------------------googlenet--------------------------------
 
-rem @echo off
-rem set root=C:\...\
-rem set pojname=CF
-rem set arch=googlenet  
-rem start cmd /c ^
-rem "cd /D %root%%pojname%  ^
-rem & [python.exe dir]/python.exe main_win.py ^
-rem --arch googlenet ^
-rem --resume [pre-trained model dir] ^
-rem --compress_rate [0.2]+[0.8]*24+[0.,0.4,0.] ^
-rem --num_workers 1 ^
-rem --epochs 1 ^
-rem --job_dir %root%%pojname% ^
-rem --lr 0.001 ^
-rem --lr_decay_step 5 ^
-rem --save_id 1 ^
-rem --weight_decay 0. ^
-rem --dataset CIFAR10 ^
-rem --data_dir G:\data ^
-rem & [python.exe dir]/python.exe main_win.py ^
-rem --arch googlenet ^
-rem --from_scratch True ^
-rem --resume finally_pruned_model/googlenet_1.pt ^
-rem --num_workers 2 ^
-rem --epochs 30 ^
-rem --job_dir %root%%pojname% ^
-rem --lr 0.01 ^
-rem --lr_decay_step 5,15 ^
-rem --save_id 1 ^
-rem --weight_decay 0.005 ^
-rem --data_dir G:\data ^
-rem --dataset CIFAR10 ^
-rem & pause"
+@echo off
+start cmd /c ^
+"cd /D [code dir]  ^
+& [python.exe dir]/python.exe main_win.py ^
+--arch googlenet ^
+--resume [pre-trained model dir] ^
+--compress_rate [0.2]+[0.8]*24+[0.,0.4,0.] ^
+--num_workers 1 ^
+--epochs 1 ^
+--lr 0.001 ^
+--lr_decay_step 5 ^
+--save_id 1 ^
+--weight_decay 0. ^
+--dataset CIFAR10 ^
+--data_dir [dataset dir] ^
+& [python.exe dir]/python.exe main_win.py ^
+--arch googlenet ^
+--from_scratch True ^
+--resume finally_pruned_model/googlenet_1.pt ^
+--num_workers 2 ^
+--epochs 30 ^
+--lr 0.01 ^
+--lr_decay_step 5,15 ^
+--save_id 1 ^
+--weight_decay 0.005 ^
+--data_dir [dataset dir] ^
+--dataset CIFAR10 ^
+& pause"
