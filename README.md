@@ -135,7 +135,7 @@ python main_win.py \
 --dataset CIFAR10 
 ```
 
-**2. GoogLeNet**
+**4. GoogLeNet**
 
 |    Architecture     | Compress Rate                      |    Params    |    Flops     | Accuracy |
 | :-----------------: | :--------------------------------- | :----------: | :----------: | :------: |
@@ -171,7 +171,7 @@ python main_win.py \
 --dataset CIFAR10
 ```
 
-**3. ResNet-50**
+**4. ResNet-50**
 
 |    Architecture     | Compress Rate                                                |    Params     |    Flops     | Top-1 Accuracy | Top-5 Accuracy |
 | :-----------------: | :----------------------------------------------------------- | :-----------: | :----------: | :------------: | -------------- |
@@ -186,7 +186,7 @@ python main_win.py \
 --resume [pre-trained model dir] \
 --data_dir [dataset dir] \
 --dataset ImageNet \
---compress_rate [0.]+[0.1,0.1,0.2]*1+[0.5,0.5,0.2]*2+[0.1,0.1,0.2]*1+[0.5,0.5,0.2]*3+[0.1,0.1,0.2]*1+[0.5,0.5,0.2]*5+[0.1,0.1,0.1]+[0.2,0.2,0.1]*2 \
+--compress_rate [0.]+[0.1,0.1,0.4]*1+[0.7,0.7,0.4]*2+[0.2,0.2,0.4]*1+[0.7,0.7,0.4]*3+[0.2,0.2,0.3]*1+[0.7,0.7,0.3]*5+[0.1,0.1,0.1]+[0.2,0.3,0.1]*2 \
 --num_workers [worker numbers] \
 --batch_size 64 \
 --epochs 2 \
