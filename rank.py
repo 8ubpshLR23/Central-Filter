@@ -111,7 +111,6 @@ def init():
 
 	np.seterr(divide='ignore',invalid='ignore')
 
-	# model = eval(args.arch)().to(device)
 	if compress_rate is not None:
 		model = eval(args.arch)(compress_rate = compress_rate).to(device)
 	else :
@@ -150,9 +149,7 @@ def get_closeness_2(Graph,N):
 			sum += 1024 - w 
 		if sum <= 0: 
 			close.append(0)
-			# print(i,len(Graph[i]),0,999)
 			continue
-		# print(i,len(Graph[i]),sum,len(Graph[i])/sum)
 		close.append(len(Graph[i])/sum)
 	return close
 
@@ -170,10 +167,7 @@ def del_filter(G,closeness,F,N,cdel = -1,pruned_filters = None):
 	rots = set() 
 	ind = np.argsort(closeness)
 	cnt = 0 
-	delegate_G = [[] for x in range(N)] # 卷积核替代图
-
-	# print('1  ',closeness)
-	# print('2  ',ind)
+	delegate_G = [[] for x in range(N)] 
 
 	for i in range(N-1,-1,-1):
 		if closeness[ind[i]] > 0:
@@ -230,7 +224,7 @@ def get_dels(G,N,m):
 	return del_num,scc_num,F
 
 def get_threshold(G,ratio,N):
-	X = math.ceil(N * ratio) # 要删去的个数
+	X = math.ceil(N * ratio) 
 	eps = 1e-7
 	l = np.array(G).min()-eps
 	r = np.array(G).max()+eps
@@ -269,8 +263,6 @@ def ger_rank_one(model,arch,layer_id,ratio,trainloader,device,calc_dis_mtx = Fal
 	G = []
 	delegate_G = []
 
-	# print(D[13])
-
 	if ratio > 0.:
 		threshold,del_num,scc_num,F = get_threshold(D,ratio,num)
 		for i in range(num):
@@ -280,7 +272,6 @@ def ger_rank_one(model,arch,layer_id,ratio,trainloader,device,calc_dis_mtx = Fal
 					edges.append((j,w))
 			G.append(edges)
 		closeness = get_closeness_2(G,num)
-		# closeness = get_degree(G,num)
 		rank,delegate_G = del_filter(G,closeness,F,num,cdel = math.ceil(num*ratio)) # 
 	else :
 		rank = list(range(num))
@@ -378,7 +369,6 @@ def inference():
             labels = labels.to(device)
 
             outputs = model(inputs)
-            # total += outputs.size(0)
 
 def pearson(image1, image2):
     X = np.vstack([image1, image2])
@@ -521,8 +511,6 @@ def get_distance_matrix_one(layers = -1,layer_id = -1):
 
 			D = [[] for x in range(e-f)]
 
-			# print(a,b,f,e)
-
 			for i in range(f,e):
 				print('----->',i)
 				for j in range(f,e):
@@ -531,15 +519,10 @@ def get_distance_matrix_one(layers = -1,layer_id = -1):
 						continue
 					_sum = 0.
 					for k in range(a):
-						# .detach()  not for gradient calc, save memory 
-						# torch.cuda.empty_cache()
 						h,w = output[k,i,:,:].detach().size()
 						x = output[k,i,:,:].detach().view(-1, h*w)
 						y = output[k,j,:,:].detach().view(-1, h*w)
-						# if x.sum() == 0 or y.sum() == 0 or len(set(x)) == 1 or len(set(y)) == 1:
-						# 	_sum += -1
-						# if k == 0 :
-						# 	print('---> ',i,j,k,x.sum(),y.sum(),len(set(x[0].tolist())),len(set(y[0].tolist())))
+
 						if (len(set(x[0].tolist())) == 1 and len(set(y[0].tolist())) == 1) or (x.sum() == 0. and y.sum() == 0.):
 							_sum += 1
 						elif x.sum() == 0. or y.sum() == 0.:
@@ -570,11 +553,8 @@ def get_distance_matrix_one(layers = -1,layer_id = -1):
 			flag = True
 			for i in range(1,5):
 				name = 'model.layer' + str(i)
-				# print(name)
-				# print(cnt,layer_id)
 				if flag is False: break
 				for _,x in enumerate(eval(name)) :
-					# print(_,x)
 					cnt += 1
 					if cnt == layer_id : 
 						conv_outs.append(x.relu1)
@@ -587,7 +567,6 @@ def get_distance_matrix_one(layers = -1,layer_id = -1):
 						break
 					cnt += 1
 					if cnt == layer_id : 
-						# print(233333)
 						conv_outs.append(x.relu3)
 						flag = False
 						break
