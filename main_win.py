@@ -176,7 +176,7 @@ def train(epoch,model,cov_id,trainloader,optimizer,criterion,mask = None):
 	_since = time.time()
 	for i, (inputs,labels) in enumerate(trainloader, 0):
 
-		if i > 1 : break
+		# if i > 1 : break
 
 		inputs = inputs.to(device)
 		labels = labels.to(device)
@@ -211,7 +211,7 @@ def validate(epoch,model,cov_id,testloader,criterion,save = True):
 	with torch.no_grad():
 		since = time.time()
 		for i, data in enumerate(testloader, 0):
-			if i > 10 : break
+			# if i > 10 : break
 			inputs, labels = data
 			inputs = inputs.to(device)
 			labels = labels.to(device)
@@ -237,12 +237,12 @@ def validate(epoch,model,cov_id,testloader,criterion,save = True):
 			# 'scheduler':scheduler.state_dict(),
 			# 'optimizer': optimizer.state_dict() 
 		}
-		if not os.path.isdir(args.job_dir + '/pruned_checkpoint'):
-			os.makedirs(args.job_dir + '/pruned_checkpoint')
+		if not os.path.isdir(args.job_dir + 'pruned_checkpoint'):
+			os.makedirs(args.job_dir + 'pruned_checkpoint')
 		cov_name = '_cov' + str(cov_id)
 		if cov_id == -1: cov_name = ''
-		torch.save(state,args.job_dir + '/pruned_checkpoint/'+args.arch+cov_name + '.pt')
-		logger.info('storing checkpoint:'+'/pruned_checkpoint/'+args.arch+cov_name + '.pt')
+		torch.save(state,args.job_dir + 'pruned_checkpoint/'+args.arch+cov_name + '.pt')
+		logger.info('storing checkpoint:'+'pruned_checkpoint/'+args.arch+cov_name + '.pt')
 
 	return top1.avg,top5.avg
 
@@ -265,8 +265,8 @@ def iter_vgg(layers = 13):
 			model.load_state_dict(_state_dict(pruned_checkpoint['state_dict']))
 
 		else :
-			pruned_checkpoint = torch.load(args.job_dir + "/pruned_checkpoint/"+args.arch+"_cov" + str(cov_id+1) + '.pt', map_location=device)
-			logger.info('loading checkpoint:' + "/pruned_checkpoint/"+args.arch+"_cov" + str(cov_id+1) + '.pt')
+			pruned_checkpoint = torch.load(args.job_dir + "pruned_checkpoint/"+args.arch+"_cov" + str(cov_id+1) + '.pt', map_location=device)
+			logger.info('loading checkpoint:' + "pruned_checkpoint/"+args.arch+"_cov" + str(cov_id+1) + '.pt')
 			model.load_state_dict(pruned_checkpoint['state_dict'])
 
 		conv_name = 'features.conv' + str(cfg_cov[cov_id]) + '.weight'
@@ -296,7 +296,7 @@ def iter_vgg(layers = 13):
 	logger.info(best_accs)
 	logger.info([len(x) for x in ranks])
 
-	finally_state_dict = torch.load(args.job_dir + "/pruned_checkpoint/"+args.arch+"_cov" + str(0) + '.pt', map_location=device)
+	finally_state_dict = torch.load(args.job_dir + "pruned_checkpoint/"+args.arch+"_cov" + str(0) + '.pt', map_location=device)
 	rst_model = vgg_16_bn(_state_dict(finally_state_dict['state_dict']),ranks)
 	logger.info(rst_model)
 	flops,params = model_size(rst_model,args.input_size,device)
@@ -308,10 +308,10 @@ def iter_vgg(layers = 13):
 		'ranks':ranks,
 		'compress_rate':compress_rate
 	}
-	if not os.path.isdir(args.job_dir + '/finally_pruned_model'):
-		os.makedirs(args.job_dir + '/finally_pruned_model')
-	torch.save(state,args.job_dir + '/finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'.pt')
-	logger.info('storing pruned_model:'+'/finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'.pt')
+	if not os.path.isdir(args.job_dir + 'finally_pruned_model'):
+		os.makedirs(args.job_dir + 'finally_pruned_model')
+	torch.save(state,args.job_dir + 'finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'.pt')
+	logger.info('storing pruned_model:'+'finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'.pt')
 	acc1,acc5 = validate(0,rst_model,0,testloader,criterion,save = False)
 	logger.info('finally model  Acc@1: {:.2f} Acc@5: {:.2f} flops: {} params:{}'.format(acc1,acc5,flops,params))
 
@@ -333,8 +333,8 @@ def iter_resnet_56():
 				logger.info('loading checkpoint:' + args.resume)
 				model.load_state_dict(_state_dict(pruned_checkpoint['state_dict']))
 			else :
-				pruned_checkpoint = torch.load(args.job_dir + "/pruned_checkpoint/"+args.arch+"_cov" + str(_id) + '.pt', map_location=device)
-				logger.info('loading checkpoint:' + "/pruned_checkpoint/"+args.arch+"_cov" + str(_id) + '.pt')
+				pruned_checkpoint = torch.load(args.job_dir + "pruned_checkpoint/"+args.arch+"_cov" + str(_id) + '.pt', map_location=device)
+				logger.info('loading checkpoint:' + "pruned_checkpoint/"+args.arch+"_cov" + str(_id) + '.pt')
 				model.load_state_dict(pruned_checkpoint['state_dict'])
 
 			tmp_ranks = []
@@ -363,8 +363,8 @@ def iter_resnet_56():
 
 	#--------------------------------------------the first layer------------------------------------#
 
-	pruned_checkpoint = torch.load(args.job_dir + "/pruned_checkpoint/"+args.arch+"_cov" + str(2) + '.pt', map_location=device)
-	logger.info('loading checkpoint:' + "/pruned_checkpoint/"+args.arch+"_cov" + str(2) + '.pt')
+	pruned_checkpoint = torch.load(args.job_dir + "pruned_checkpoint/"+args.arch+"_cov" + str(2) + '.pt', map_location=device)
+	logger.info('loading checkpoint:' + "pruned_checkpoint/"+args.arch+"_cov" + str(2) + '.pt')
 	model.load_state_dict(pruned_checkpoint['state_dict'])
 	rank,delegate_G = ger_rank_one_ablation_study(model,args.arch,0,compress_rate[0],trainloader,device,type = args.ablation_id)
 	mask.layer_mask(0,param_per_cov=3, arch=args.arch)
@@ -385,7 +385,7 @@ def iter_resnet_56():
 	logger.info(best_accs)
 	logger.info([len(x) for x in ranks])
 
-	finally_state_dict = torch.load(args.job_dir + "/pruned_checkpoint/"+args.arch+"_cov" + str(0) + '.pt', map_location=device)
+	finally_state_dict = torch.load(args.job_dir + "pruned_checkpoint/"+args.arch+"_cov" + str(0) + '.pt', map_location=device)
 	rst_model = resnet_56(compress_rate = compress_rate,oristate_dict = _state_dict(finally_state_dict['state_dict']),ranks=ranks)
 
 	logger.info(rst_model)
@@ -400,10 +400,10 @@ def iter_resnet_56():
 		'compress_rate':compress_rate
 	}
 
-	if not os.path.isdir(args.job_dir + '/finally_pruned_model'):
-		os.makedirs(args.job_dir + '/finally_pruned_model')
-	torch.save(state,args.job_dir + '/finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'.pt')
-	logger.info('storing pruned_model:'+'/finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'.pt')
+	if not os.path.isdir(args.job_dir + 'finally_pruned_model'):
+		os.makedirs(args.job_dir + 'finally_pruned_model')
+	torch.save(state,args.job_dir + 'finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'.pt')
+	logger.info('storing pruned_model:'+'finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'.pt')
 	acc1,acc5 = validate(0,rst_model,0,testloader,criterion,save = False)
 	logger.info('finally model  Acc@1: {:.2f} Acc@5: {:.2f} flops: {} params:{}'.format(acc1,acc5,flops,params))
 
@@ -542,8 +542,8 @@ def iter_resnet_50():
 			logger.info("===> pruning layer_id {} block_id {}".format(layer_id,block_id))
 			block_start_id = 0 # reset
 			if _id != 0:
-				pruned_checkpoint = torch.load(args.job_dir + "/pruned_checkpoint/"+args.arch+"_cov" + str(_id) + '.pt', map_location=device)
-				logger.info('loading checkpoint:' + "/pruned_checkpoint/"+args.arch+"_cov" + str(_id) + '.pt')
+				pruned_checkpoint = torch.load(args.job_dir + "pruned_checkpoint/"+args.arch+"_cov" + str(_id) + '.pt', map_location=device)
+				logger.info('loading checkpoint:' + "pruned_checkpoint/"+args.arch+"_cov" + str(_id) + '.pt')
 				model.load_state_dict(pruned_checkpoint['state_dict'])
 
 			delegate_Gs = []
@@ -601,7 +601,7 @@ def iter_resnet_50():
 	logger.info(compress_rate)
 	logger.info([len(x) for x in ranks])
 
-	finally_state_dict = torch.load(args.job_dir + "/pruned_checkpoint/"+args.arch+'_cov52.pt', map_location=device)
+	finally_state_dict = torch.load(args.job_dir + "pruned_checkpoint/"+args.arch+'_cov52.pt', map_location=device)
 	rst_model = resnet_50(compress_rate=compress_rate,oristate_dict = _state_dict(finally_state_dict['state_dict']),ranks = ranks)
 	logger.info(rst_model)
 	# input_size = 224
@@ -615,10 +615,10 @@ def iter_resnet_50():
 		'ranks':ranks,
 		'compress_rate':compress_rate
 	}
-	if not os.path.isdir(args.job_dir + '/finally_pruned_model'):
-		os.makedirs(args.job_dir + '/finally_pruned_model')
-	torch.save(state,args.job_dir + '/finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'.pt')
-	logger.info('storing pruned_model:'+'/finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'.pt')
+	if not os.path.isdir(args.job_dir + 'finally_pruned_model'):
+		os.makedirs(args.job_dir + 'finally_pruned_model')
+	torch.save(state,args.job_dir + 'finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'.pt')
+	logger.info('storing pruned_model:'+'finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'.pt')
 	acc1,acc5 = validate(0,rst_model,0,testloader,criterion,save = False)
 	logger.info('finally model  Acc@1: {:.2f} Acc@5: {:.2f} flops: {} params:{}'.format(acc1,acc5,flops,params))
 
@@ -664,8 +664,8 @@ def iter_densenet_40():
 
 			logger.info("===> pruning dense_id {} block_id {}".format(dense_id,block_id))
 			
-			pruned_checkpoint = torch.load(args.job_dir + "/pruned_checkpoint/"+args.arch+"_cov" + str(_id-1) + '.pt', map_location=device)
-			logger.info('loading checkpoint:' + "/pruned_checkpoint/"+args.arch+"_cov" + str(_id-1) + '.pt')
+			pruned_checkpoint = torch.load(args.job_dir + "pruned_checkpoint/"+args.arch+"_cov" + str(_id-1) + '.pt', map_location=device)
+			logger.info('loading checkpoint:' + "pruned_checkpoint/"+args.arch+"_cov" + str(_id-1) + '.pt')
 			model.load_state_dict(pruned_checkpoint['state_dict'])
 
 			conv_name = 'dense' + str(dense_id) +'.' + str(block_id) + '.conv1.weight'
@@ -716,7 +716,7 @@ def iter_densenet_40():
 	logger.info(best_accs)
 	logger.info([len(x) for x in ranks])
 
-	finally_state_dict = torch.load(args.job_dir + "/pruned_checkpoint/"+args.arch+'_cov38.pt', map_location=device)
+	finally_state_dict = torch.load(args.job_dir + "pruned_checkpoint/"+args.arch+'_cov38.pt', map_location=device)
 	rst_model = densenet_40(compress_rate = compress_rate,oristate_dict = _state_dict(finally_state_dict['state_dict']),ranks = ranks).to(device)
 	flops,params = model_size(rst_model,args.input_size,device)
 	logger.info(rst_model)
@@ -728,10 +728,10 @@ def iter_densenet_40():
 		'ranks':ranks,
 		'compress_rate':compress_rate
 	}
-	if not os.path.isdir(args.job_dir + '/finally_pruned_model'):
-		os.makedirs(args.job_dir + '/finally_pruned_model')
-	torch.save(state,args.job_dir + '/finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'.pt')
-	logger.info('storing pruned_model:'+'/finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'.pt')
+	if not os.path.isdir(args.job_dir + 'finally_pruned_model'):
+		os.makedirs(args.job_dir + 'finally_pruned_model')
+	torch.save(state,args.job_dir + 'finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'.pt')
+	logger.info('storing pruned_model:'+'finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'.pt')
 	acc1,acc5 = validate(0,rst_model,0,testloader,criterion,save = False)
 	logger.info('finally model  Acc@1: {:.2f} Acc@5: {:.2f} flops: {} params:{}'.format(acc1,acc5,flops,params))
 
@@ -792,8 +792,8 @@ def iter_googlenet():
 		_rank = []
 		delegate_Gs = []
 
-		pruned_checkpoint = torch.load(args.job_dir + "/pruned_checkpoint/"+args.arch+"_cov" + str(i-1) + '.pt', map_location=device)
-		logger.info('loading checkpoint:' + "/pruned_checkpoint/"+args.arch+"_cov" + str(i-1) + '.pt')
+		pruned_checkpoint = torch.load(args.job_dir + "pruned_checkpoint/"+args.arch+"_cov" + str(i-1) + '.pt', map_location=device)
+		logger.info('loading checkpoint:' + "pruned_checkpoint/"+args.arch+"_cov" + str(i-1) + '.pt')
 		model.load_state_dict(pruned_checkpoint['state_dict'])
 
 		delegate_Gs.append([])
@@ -832,7 +832,7 @@ def iter_googlenet():
 	logger.info(best_accs)
 	logger.info(compress_rate)
 
-	finally_state_dict = torch.load(args.job_dir + "/pruned_checkpoint/"+args.arch+'_cov9.pt', map_location=device)
+	finally_state_dict = torch.load(args.job_dir + "pruned_checkpoint/"+args.arch+'_cov9.pt', map_location=device)
 	rst_model =  googlenet(compress_rate = compress_rate,oristate_dict = _state_dict(finally_state_dict['state_dict']),ranks = ranks).to(device)
 	flops,params = model_size(rst_model,args.input_size,device)
 	logger.info(rst_model)
@@ -845,10 +845,10 @@ def iter_googlenet():
 		'ranks':ranks,
 		'compress_rate':compress_rate
 	}
-	if not os.path.isdir(args.job_dir + '/finally_pruned_model'):
-		os.makedirs(args.job_dir + '/finally_pruned_model')
-	torch.save(state,args.job_dir + '/finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'.pt')
-	logger.info('storing pruned_model:'+'/finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'.pt')
+	if not os.path.isdir(args.job_dir + 'finally_pruned_model'):
+		os.makedirs(args.job_dir + 'finally_pruned_model')
+	torch.save(state,args.job_dir + 'finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'.pt')
+	logger.info('storing pruned_model:'+'finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'.pt')
 	acc1,acc5 = validate(0,rst_model,0,testloader,criterion,save = False)
 	logger.info('finally model  Acc@1: {:.2f} Acc@5: {:.2f} flops: {} params:{}'.format(acc1,acc5,flops,params))
 
@@ -949,10 +949,10 @@ def train_resnet_50_from_scratch():
 		'best_prec1': round(best_acc.item(),4),
 		'compress_rate': compress_rate
 	}
-	if not os.path.isdir(args.job_dir + '/finally_pruned_model'):
-		os.makedirs(args.job_dir + '/finally_pruned_model')
-	torch.save(state,args.job_dir + '/finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'_fs.pt')
-	logger.info('storing pruned_model:'+'/finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'_fs.pt')
+	if not os.path.isdir(args.job_dir + 'finally_pruned_model'):
+		os.makedirs(args.job_dir + 'finally_pruned_model')
+	torch.save(state,args.job_dir + 'finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'_fs.pt')
+	logger.info('storing pruned_model:'+'finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'_fs.pt')
 	acc1,acc5 = validate(0,rst_model,0,testloader,criterion,save = False)
 	logger.info('finally model  Acc@1: {:.2f} Acc@5: {:.2f} flops: {} params:{}'.format(acc1,acc5,flops,params))
 
@@ -982,7 +982,7 @@ def train_from_scratch():
 
 	flops,params = model_size(model,args.input_size,device)
 
-	best_model = torch.load(args.job_dir + "/pruned_checkpoint/"+args.arch+'.pt', map_location=device)
+	best_model = torch.load(args.job_dir + "pruned_checkpoint/"+args.arch+'.pt', map_location=device)
 	rst_model = eval(args.arch)(compress_rate=compress_rate).to(device)
 	rst_model.load_state_dict(_state_dict(best_model['state_dict']))
 
@@ -991,10 +991,10 @@ def train_from_scratch():
 		'best_prec1': round(best_acc.item(),4),
 		'compress_rate': compress_rate
 	}
-	if not os.path.isdir(args.job_dir + '/finally_pruned_model'):
-		os.makedirs(args.job_dir + '/finally_pruned_model')
-	torch.save(state,args.job_dir + '/finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'_fs.pt')
-	logger.info('storing pruned_model:'+'/finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'_fs.pt')
+	if not os.path.isdir(args.job_dir + 'finally_pruned_model'):
+		os.makedirs(args.job_dir + 'finally_pruned_model')
+	torch.save(state,args.job_dir + 'finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'_fs.pt')
+	logger.info('storing pruned_model:'+'finally_pruned_model/'+args.arch+'_'+str(args.save_id)+'_fs.pt')
 	acc1,acc5 = validate(0,rst_model,0,testloader,criterion,save = False)
 	logger.info('finally model  Acc@1: {:.2f} Acc@5: {:.2f} flops: {} params:{}'.format(acc1,acc5,flops,params))
 	pass
