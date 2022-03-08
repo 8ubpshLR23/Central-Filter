@@ -65,7 +65,7 @@ The experimental results and related configurations covered in this paper are as
 
 **1. VGGNet**
 
-|   Architecture   | Compress Rate                        |    Params    |     Flops      | Accuracy |
+|   Architecture   | Compression Rate                        |    Params    |     Flops      | Accuracy |
 | :--------------: | :----------------------------------- | :----------: | :------------: | :------: |
 | VGG-16(Baseline) |                                      | 14.98M(0.0%) | 313.73M(0.0%)  |  93.96%  |
 |      VGG-16      | [0.3]+[0.2]*4+[0.3]*2+[0.4]+[0.85]*4 | 2.45M(83.6%) | 124.10M(60.4%) |  93.67%  |
@@ -89,7 +89,7 @@ python main_win.py \
 
 **2. ResNet-56**
 
-|    Architecture     | Compress Rate                                    |    Params    |     Flops     | Accuracy |
+|    Architecture     | Compression Rate                                    |    Params    |     Flops     | Accuracy |
 | :-----------------: | :----------------------------------------------- | :----------: | :-----------: | :------: |
 | ResNet-56(Baseline) |                                                  | 0.85M(0.0%)  | 125.49M(0.0%) |  93.26%  |
 |      ResNet-56      | [0.]+[0.2,0.]*9+[0.3,0.]*9+[0.4,0.]*9            | 0.53M(37.6%) | 86.11M(31.4%) |  93.64%  |
@@ -113,7 +113,7 @@ python main_win.py \
 
 **3.DenseNet-40**
 
-|     Architecture      | Compress Rate                                     |    Params    |     Flops      | Accuracy |
+|     Architecture      | Compression Rate                                     |    Params    |     Flops      | Accuracy |
 | :-------------------: | :------------------------------------------------ | :----------: | :------------: | :------: |
 | DenseNet-40(Baseline) |                                                   | 1.04M(0.0%)  | 282.00M(0.0%)  |  94.81%  |
 |      DenseNet-40      | [0.]+[0.3]*12+[0.1]+[0.3]*12+[0.1]+[0.3]*8+[0.]*4 | 0.67M(35.6%) | 165.38M(41.4%) |  94.33%  |
@@ -137,7 +137,7 @@ python main_win.py \
 
 **4. GoogLeNet**
 
-|    Architecture     | Compress Rate                      |    Params    |    Flops     | Accuracy |
+|    Architecture     | Compression Rate                      |    Params    |    Flops     | Accuracy |
 | :-----------------: | :--------------------------------- | :----------: | :----------: | :------: |
 | GoogLeNet(Baseline) |                                    | 6.15M(0.0%)  | 1520M(0.0%)  |  95.05%  |
 |      GoogLeNet      | [0.2]+[0.7]*15+[0.8]*9+[0.,0.4,0.] | 2.73M(55.6%) | 0.56B(63.2%) |  94.70%  |
@@ -173,7 +173,7 @@ python main_win.py \
 
 **4. ResNet-50**
 
-|    Architecture     | Compress Rate                                                |    Params     |    Flops     | Top-1 Accuracy | Top-5 Accuracy |
+|    Architecture     | Compression Rate                                                |    Params     |    Flops     | Top-1 Accuracy | Top-5 Accuracy |
 | :-----------------: | :----------------------------------------------------------- | :-----------: | :----------: | :------------: | -------------- |
 | ResNet-50(baseline) |                                                              | 25.55M(0.0%)  | 4.11B(0.0%)  |     76.15%     | 92.87%         |
 |      ResNet-50      | [0.]+[0.1,0.1,0.2]*1+[0.5,0.5,0.2]*2+[0.1,0.1,0.2]*1+[0.5,0.5,0.2]*3+[0.1,0.1,0.2]*1+[0.5,0.5,0.2]*5+[0.1,0.1,0.1]+[0.2,0.2,0.1]*2 | 16.08M(36.9%) | 2.13B(47.9%) |     75.08%     | 92.30%         |
